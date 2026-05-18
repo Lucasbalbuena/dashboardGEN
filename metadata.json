@@ -1,0 +1,7 @@
+{
+  "name": "Dashboard de Generadores Tradicional",
+  "description": "Dashboard de gestión y monitoreo manual de generadores con historial de carga y cortes.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
