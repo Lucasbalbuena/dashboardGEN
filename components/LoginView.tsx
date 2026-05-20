@@ -212,9 +212,9 @@ const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
     <div className="min-h-screen flex items-center justify-center bg-slate-950 px-4 font-sans text-slate-900">
       <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden p-10 space-y-8 border border-slate-200">
         <div className="text-center space-y-2">
-          <div className="w-20 h-20 bg-gradient-to-br from-indigo-600 to-indigo-700 text-white rounded-[2rem] flex items-center justify-center text-4xl font-black mx-auto mb-4 shadow-xl shadow-indigo-900/20">S</div>
+          <div className="w-24 h-24 bg-gradient-to-br from-indigo-600 to-indigo-700 text-white rounded-[2rem] flex items-center justify-center text-3xl font-black mx-auto mb-4 shadow-xl shadow-indigo-900/20">ASG</div>
           <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter">
-            {mode === 'login' && 'Acceso Supabase'}
+            {mode === 'login' && 'Acceso Sistema Generadores'}
             {mode === 'recovery' && 'Recuperar Acceso'}
             {mode === 'signup' && 'Crear Cuenta'}
           </h2>
@@ -277,7 +277,7 @@ const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
               disabled={isLoading}
               className="w-full py-5 bg-slate-900 hover:bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl transition-all active:scale-95 disabled:opacity-50"
             >
-              {isLoading ? 'Autenticando...' : 'Conectar con Supabase'}
+              {isLoading ? 'Autenticando...' : 'Iniciar Sesión'}
             </button>
             <div className="flex flex-col items-center gap-3 pt-2">
               <button type="button" onClick={() => { setMode('recovery'); setError(''); }} className="text-[10px] font-black uppercase text-slate-400 hover:text-indigo-500 transition-colors">¿Olvidó su contraseña?</button>
