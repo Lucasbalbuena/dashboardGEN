@@ -51,10 +51,11 @@ const formatearUltimaCarga = (valor: string) => {
 const GeneratorTable: React.FC<GeneratorTableProps> = ({ generators, onSort, sortConfig, onRowClick, selectedRowId, editingCell, onCellDoubleClick, onUpdate, onEdit, onDelete }) => {
   const headers: { label: string; key: keyof Generator }[] = [
   { label: 'Ubicación / Nombre', key: 'name' },
-  { label: 'S/N', key: 'serialNumber' },
+  { label: 'N° de Serie', key: 'serialNumber' },
   { label: 'Potencia', key: 'powerKVA' },
   { label: 'Horas Ej.', key: 'executionHours' },
-  { label: 'Capacidad de Combustible', key: 'fuelLevel' },
+  { label: 'Capacidad de Combustible', key: 'tankCapacity' },
+  { label: 'Estado Nivel de Combustible (%)', key: 'fuelLevel' },
   { label: 'Estado', key: 'status' },
   { label: 'Voltaje', key: 'batteryVoltage' },
   { label: 'Fecha de Modificación', key: 'lastRechargeDate' }
@@ -124,16 +125,17 @@ const GeneratorTable: React.FC<GeneratorTableProps> = ({ generators, onSort, sor
                   ) : <span className="text-xs font-black text-slate-900">{g.fuelLevel}%</span>}
                 </div>
               </td>
+               <td className="px-6 py-4">
+                <span className={`px-3 py-1.5 rounded-lg text-[9px] font-black border uppercase tracking-widest ${getStatusClass(g.status)}`}>
+                  {g.status}
+                </span>
+              </td>
               <td className="px-6 py-4 text-amber-600 font-black text-xs" onDoubleClick={() => onCellDoubleClick(g.id, 'batteryVoltage')}>
                 {editingCell?.id === g.id && editingCell.key === 'batteryVoltage' ? (
                   <input autoFocus onBlur={(e) => onUpdate(g.id, 'batteryVoltage', e.target.value)} defaultValue={g.batteryVoltage || ''} className={`${inputBaseClass} w-20`} />
                 ) : g.batteryVoltage || '-'}
               </td>
-              <td className="px-6 py-4">
-                <span className={`px-3 py-1.5 rounded-lg text-[9px] font-black border uppercase tracking-widest ${getStatusClass(g.status)}`}>
-                  {g.status}
-                </span>
-              </td>
+              
               <td 
                 className="px-6 py-4 text-slate-700 text-sm font-semibold whitespace-pre-line" 
                 onDoubleClick={() => onCellDoubleClick(g.id, 'lastRechargeDate')}
