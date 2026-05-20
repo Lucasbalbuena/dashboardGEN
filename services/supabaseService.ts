@@ -302,6 +302,8 @@ export const supabaseService = {
 
 async deleteEvent(id: string) {
 
+    console.log("DELETE EVENT VERSION NUEVA");
+
     const { error } = await supabase
         .from('eventos')
         .delete()
