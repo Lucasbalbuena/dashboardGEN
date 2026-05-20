@@ -18,7 +18,7 @@ function parseIndustrialNumber(value: any): number | null {
   return isNaN(parsed) ? null : parsed;
 }
 
-export const supabaseService = {
+ const supabaseService = {
   // --- AUTH ---
   async signIn(email: string, password: string) {
     return await supabase.auth.signInWithPassword({ email, password });
@@ -316,3 +316,5 @@ async deleteEvent(id: string) {
 }
 
 };
+
+export { supabaseService };

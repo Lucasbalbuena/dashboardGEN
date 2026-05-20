@@ -18,7 +18,7 @@ function parseIndustrialNumber(value: any): number | null {
   return isNaN(parsed) ? null : parsed;
 }
 
-export const supabaseService = {
+ const supabaseService = {
   // --- AUTH ---
   async signIn(email: string, password: string) {
     return await supabase.auth.signInWithPassword({ email, password });
@@ -176,7 +176,8 @@ export const supabaseService = {
 
   console.log("SAVE SCAN INPUT:", scanData);
 
-const payload = {
+  const payload = {
+  texto_ocr: scanData.texto_ocr || "",
   json_extraido: JSON.stringify(scanData.json_extraido || {})
 };
 
@@ -286,8 +287,34 @@ const payload = {
   // --- REALTIME SUBSCRIPTIONS ---
   subscribeToGenerators(callback: (payload: any) => void) {
     return supabase
-      .channel('public:generadores')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'generadores' }, callback)
-      .subscribe();
-  }
+        .channel('public:generadores')
+        .on(
+            'postgres_changes',
+            {
+                event: '*',
+                schema: 'public',
+                table: 'generadores'
+            },
+            callback
+        )
+        .subscribe();
+},
+
+async deleteEvent(id: string) {
+
+    console.log("DELETE EVENT VERSION NUEVA");
+
+    const { error } = await supabase
+        .from('eventos')
+        .delete()
+        .eq('id', id);
+
+    if (error) {
+        console.error("Error eliminando evento:", error);
+        throw error;
+    }
+}
+
 };
+
+export { supabaseService };
