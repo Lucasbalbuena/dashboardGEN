@@ -300,7 +300,7 @@ export const supabaseService = {
         .subscribe();
 },
 
-deleteEvent: async (id: string) => {
+async deleteEvent(id: string) {
 
     const { error } = await supabase
         .from('eventos')
