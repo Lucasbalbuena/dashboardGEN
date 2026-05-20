@@ -50,15 +50,15 @@ const formatearUltimaCarga = (valor: string) => {
 
 const GeneratorTable: React.FC<GeneratorTableProps> = ({ generators, onSort, sortConfig, onRowClick, selectedRowId, editingCell, onCellDoubleClick, onUpdate, onEdit, onDelete }) => {
   const headers: { label: string; key: keyof Generator }[] = [
-    { label: 'Ubicación / Nombre', key: 'name' },
-    { label: 'S/N', key: 'serialNumber' },
-    { label: 'Potencia', key: 'powerKVA' },
-    { label: 'Horas Ej.', key: 'executionHours' },
-    { label: 'Capacidad de Combustible', key: 'fuelLevel' },
-{ label: '% Combustible', key: 'batteryVoltage' },
-    { label: 'Estado', key: 'status' },
-    { label: 'Últ. Carga', key: 'lastRechargeDate' }
-  ];
+  { label: 'Ubicación / Nombre', key: 'name' },
+  { label: 'S/N', key: 'serialNumber' },
+  { label: 'Potencia', key: 'powerKVA' },
+  { label: 'Horas Ej.', key: 'executionHours' },
+  { label: 'Capacidad de Combustible', key: 'fuelLevel' },
+  { label: 'Estado', key: 'status' },
+  { label: 'Voltaje', key: 'batteryVoltage' },
+  { label: 'Fecha de Modificación', key: 'lastRechargeDate' }
+];
 
   const inputBaseClass = "bg-white text-slate-900 border border-indigo-500 p-1.5 rounded shadow-sm outline-none focus:ring-2 focus:ring-indigo-300 font-bold block w-full";
 

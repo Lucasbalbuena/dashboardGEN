@@ -1,9 +1,9 @@
 
 export enum Status {
-  Optimal = 'EN ESTADO OPTIMO',
-  Normal = 'ESTADO NORMAL',
-  NeedsRecharge = 'NECESITA RECARGA',
-  Warning = 'PROXIMO A DAR AVISO',
+  Optimal = 'ÓPTIMO',
+  Normal = 'NORMAL',
+  NeedsRecharge = 'RECARGAR',
+  Warning = 'AVISO',
 }
 
 export interface Outage {
