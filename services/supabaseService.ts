@@ -288,7 +288,15 @@ export const supabaseService = {
   subscribeToGenerators(callback: (payload: any) => void) {
     return supabase
         .channel('public:generadores')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'generadores' }, callback)
+        .on(
+            'postgres_changes',
+            {
+                event: '*',
+                schema: 'public',
+                table: 'generadores'
+            },
+            callback
+        )
         .subscribe();
 },
 

@@ -15,6 +15,7 @@ import LoginView from './components/LoginView';
 import OutagesView from './components/OutagesView';
 import ManualCaptureModal from './components/ManualCaptureModal';
 import EditGeneratorModal from './components/EditGeneratorModal';
+import { supabaseService } from './services/supabaseService';
 
 declare var html2canvas: any;
 
