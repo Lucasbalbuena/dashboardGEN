@@ -287,8 +287,22 @@ export const supabaseService = {
   // --- REALTIME SUBSCRIPTIONS ---
   subscribeToGenerators(callback: (payload: any) => void) {
     return supabase
-      .channel('public:generadores')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'generadores' }, callback)
-      .subscribe();
-  }
+        .channel('public:generadores')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'generadores' }, callback)
+        .subscribe();
+},
+
+deleteEvent: async (id: string) => {
+
+    const { error } = await supabase
+        .from('eventos')
+        .delete()
+        .eq('id', id);
+
+    if (error) {
+        console.error("Error eliminando evento:", error);
+        throw error;
+    }
+}
+
 };

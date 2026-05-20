@@ -591,13 +591,32 @@ const App: React.FC = () => {
                }
             }}
             onDeleteOutage={async (id) => {
-               if (window.confirm("¿Desea eliminar este registro de corte? (Nota: No devolverá el combustible ya descontado)")) {
-                  // In a real app we would have a deleteEvent in service
-                  // For now, we can just skip or implement it
-                  setToast({ message: "Registro eliminado (solo visual)", type: "success" });
-                  setOutages(prev => prev.filter(o => o.id !== id));
-               }
-            }}
+
+   if (!window.confirm("¿Desea eliminar este registro de corte?")) {
+      return;
+   }
+
+   try {
+
+      await supabaseService.deleteEvent(id);
+
+      setOutages(prev => prev.filter(o => o.id !== id));
+
+      setToast({
+         message: "Registro eliminado correctamente",
+         type: "success"
+      });
+
+   } catch (err) {
+
+      console.error("Error eliminando corte:", err);
+
+      setToast({
+         message: "Error al eliminar registro",
+         type: "error"
+      });
+   }
+}}
             defaultOperator={currentOperator}
           />
         )}
