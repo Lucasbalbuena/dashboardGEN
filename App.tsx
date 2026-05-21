@@ -51,6 +51,7 @@ const App: React.FC = () => {
   const [view, setView] = useState<'dashboard' | 'reports' | 'logs' | 'fuel' | 'outages' | 'scanner'>('dashboard');
   const [currentMonth, setCurrentMonth] = useState(() => new Date().toISOString().slice(0, 7));
   const [currentOperator, setCurrentOperator] = useState('Operador NOC');
+  const [userRole, setUserRole] = useState<'admin' | 'viewer'>('viewer');
   
   const [generators, setGenerators] = useState<StoredGenerator[]>([]);
   const [fuelLoads, setFuelLoads] = useState<FuelLoad[]>([]);
@@ -81,34 +82,50 @@ const App: React.FC = () => {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       setIsAuthenticated(!!session);
-      if (session?.user?.email) {
-        setCurrentOperator(session.user.email);
-      }
+     if (session?.user?.email) {
+  setCurrentOperator(session.user.email);
+
+  if (session.user.email === 'noc@marandu.com.ar') {
+    setUserRole('admin');
+  } else {
+    setUserRole('viewer');
+  }
+}
       setIsLoadingAuth(false);
     };
 
     checkAuth();
 
-    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('Evento de Auth:', event);
-      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-        setIsAuthenticated(true);
-        if (session?.user?.email) {
-          setCurrentOperator(session.user.email);
-        }
-      } else if (event === 'SIGNED_OUT') {
-        setIsAuthenticated(false);
-        setCurrentOperator('Operador NOC');
-        setGenerators([]);
-        setLogs([]);
+   const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+  console.log('Evento de Auth:', event);
+
+  if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+    setIsAuthenticated(true);
+
+    if (session?.user?.email) {
+      setCurrentOperator(session.user.email);
+
+      if (session.user.email === 'noc@marandu.com.ar') {
+        setUserRole('admin');
+      } else {
+        setUserRole('viewer');
       }
-    });
+    }
 
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
-  }, []);
+  } else if (event === 'SIGNED_OUT') {
+    setIsAuthenticated(false);
+    setCurrentOperator('Operador NOC');
+    setUserRole('viewer');
+    setGenerators([]);
+    setLogs([]);
+  }
+});
 
+return () => {
+  authListener.subscription.unsubscribe();
+};
+
+}, []);
   // Fetch Data when authenticated
   useEffect(() => {
     if (isAuthenticated) {
@@ -488,7 +505,7 @@ const App: React.FC = () => {
                         setToast({ message: `Error al eliminar: ${err.message}`, type: "error" });
                     }
                   }}
-                  isReadOnly={false}
+                  isReadOnly={userRole === 'viewer'}
                 />
               </div>
               <Legend />
