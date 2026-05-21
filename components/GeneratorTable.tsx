@@ -50,12 +50,12 @@ const formatearUltimaCarga = (valor: string) => {
 
 const GeneratorTable: React.FC<GeneratorTableProps> = ({ generators, onSort, sortConfig, onRowClick, selectedRowId, editingCell, onCellDoubleClick, onUpdate, onEdit, onDelete }) => {
   const headers: { label: string; key: keyof Generator }[] = [
-  { label: 'Ubicación / Nombre', key: 'name' },
+  { label: 'Ubicación', key: 'name' },
   { label: 'N° de Serie', key: 'serialNumber' },
   { label: 'Potencia', key: 'powerKVA' },
-  { label: 'Horas Ej.', key: 'executionHours' },
+  { label: 'Horas de Ejecución.', key: 'executionHours' },
   { label: 'Capacidad de Combustible', key: 'tankCapacity' },
-  { label: 'Estado Nivel de Combustible (%)', key: 'fuelLevel' },
+  { label: 'Nivel de Combustible (%)', key: 'fuelLevel' },
   { label: 'Estado', key: 'status' },
   { label: 'Voltaje', key: 'batteryVoltage' },
   { label: 'Fecha de Modificación', key: 'lastRechargeDate' }
@@ -71,15 +71,17 @@ const GeneratorTable: React.FC<GeneratorTableProps> = ({ generators, onSort, sor
             <th 
               key={h.key} 
               onClick={() => onSort(h.key)}
-              className="px-6 py-4 text-left text-[11px] font-black uppercase tracking-widest text-slate-600 cursor-pointer hover:text-red-600 transition-colors"
+              className="px-8 py-5 text-center align-middle text-[11px] font-black uppercase tracking-wide text-slate-600 cursor-pointer hover:text-red-600 transition-colors"
             >
-              <div className="flex items-center gap-1">
+              <div className="flex items-center justify-center gap-1 text-center leading-normal">
                 {h.label}
                 {sortConfig.key === h.key && (sortConfig.direction === 'ascending' ? '↑' : '↓')}
               </div>
             </th>
           ))}
-          <th className="px-6 py-4 text-right text-[11px] font-black uppercase tracking-widest text-slate-600">Acciones</th>
+          <th className="px-10 py-4 text-center text-[11px] font-black uppercase tracking-widest text-slate-600"> 
+  Acciones
+</th>
         </tr>
       </thead>
       <tbody className="divide-y divide-slate-200">
@@ -150,7 +152,7 @@ const GeneratorTable: React.FC<GeneratorTableProps> = ({ generators, onSort, sor
                   />
                 ) : formatearUltimaCarga(g.lastRechargeDate)}
               </td>
-              <td className="px-6 py-4 text-right flex items-center justify-end gap-1">
+              <td className="px-10 py-4 flex items-center justify-center gap-2">
                 <button 
                   onClick={(e) => { e.stopPropagation(); onEdit(g); }}
                   className="opacity-0 group-hover:opacity-100 p-2 text-indigo-500 hover:bg-indigo-50 rounded-lg transition-all"
