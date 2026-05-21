@@ -471,13 +471,15 @@ return () => {
                  <Zap className="w-5 h-5" />
                  👉 Escanear Generador
                </button>
-               <button 
-                onClick={() => setIsSheetModalOpen(true)}
-                className="bg-white border border-slate-200 text-slate-600 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm flex items-center gap-2"
-               >
-                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-                 Importar Datos Externos
-               </button>
+               {userRole === 'admin' && (
+  <button 
+    onClick={() => setView('scanner')}
+    className="bg-indigo-600 text-white px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-[0.2em] hover:bg-indigo-500 transition-all shadow-xl shadow-indigo-200 flex items-center gap-3 active:scale-95"
+  >
+    <Zap className="w-5 h-5" />
+    👉 Escanear Generador
+  </button>
+)}
             </div>
             <div className="bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden print:shadow-none print:border-none">
               <div className="overflow-x-auto">
@@ -657,7 +659,7 @@ return () => {
 
         {view === 'logs' && <LogsView logs={logs} />}
         
-        {view === 'scanner' && (
+        {userRole === 'admin' && view === 'scanner' && (
           <ManualCaptureModal 
             isOpen={true} 
             onClose={() => setView('dashboard')} 
