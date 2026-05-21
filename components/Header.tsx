@@ -2,6 +2,7 @@
 import React from 'react';
 
 interface HeaderProps {
+    userRole: 'admin' | 'viewer'; 
     onAddGenerator: () => void;
     onFileUpload: (file: File) => void;
     onGoogleSheetImportClick: () => void;
@@ -20,6 +21,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ 
+    userRole,
     onAddGenerator, 
     controlDate, 
     onControlDateChange, 
@@ -50,12 +52,14 @@ const Header: React.FC<HeaderProps> = ({
                         >
                           Dashboard
                         </button>
-                        <button 
-                          onClick={() => onToggleView('scanner')}
-                          className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${view === 'scanner' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'hover:bg-slate-700 text-slate-400'}`}
-                        >
-                          Escáner
-                        </button>
+                        {userRole === 'admin' && (
+  <button 
+    onClick={() => onToggleView('scanner')}
+    className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${view === 'scanner' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'hover:bg-slate-700 text-slate-400'}`}
+  >
+    Escáner
+  </button>
+)}
                         <button 
                           onClick={() => onToggleView('outages')}
                           className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${view === 'outages' ? 'bg-orange-600 text-white shadow-lg shadow-orange-600/20' : 'hover:bg-slate-700 text-slate-400'}`}
@@ -68,28 +72,42 @@ const Header: React.FC<HeaderProps> = ({
                         >
                           Carga Fuel
                         </button>
-                        <button 
-                          onClick={() => onToggleView('reports')}
-                          className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${view === 'reports' ? 'bg-red-600 text-white shadow-lg shadow-red-600/20' : 'hover:bg-slate-700 text-slate-400'}`}
-                        >
-                          Reportes
-                        </button>
-                        <button 
-                          onClick={() => onToggleView('logs')}
-                          className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${view === 'logs' ? 'bg-red-600 text-white shadow-lg shadow-red-600/20' : 'hover:bg-slate-700 text-slate-400'}`}
-                        >
-                          Logs
-                        </button>
-                    </div>
+
+                       {userRole === 'admin' && (
+  <button
+    onClick={() => onToggleView('reports')}
+    className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+      view === 'reports'
+        ? 'bg-red-600 text-white shadow-lg shadow-red-600/20'
+        : 'hover:bg-slate-700 text-slate-400'
+    }`}
+  >
+    Reportes
+  </button>
+)}
+                        {userRole === 'admin' && (
+  <button 
+    onClick={() => onToggleView('logs')}
+    className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+      view === 'logs'
+        ? 'bg-red-600 text-white shadow-lg shadow-red-600/20'
+        : 'hover:bg-slate-700 text-slate-400'
+    }`}
+  >
+    Logs
+  </button>
+)}             </div>
 
                     <div className="flex flex-wrap items-center gap-3">
-                        <button 
-                            onClick={onScanClick}
+                       {userRole === 'admin' && (
+  <button 
+    onClick={onScanClick}
                             className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg uppercase tracking-tight"
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                             Sincronizar
                         </button>
+)}
 
                         <button 
                             onClick={onDownloadJPG}
@@ -99,12 +117,14 @@ const Header: React.FC<HeaderProps> = ({
                             Captura
                         </button>
 
-                        <button 
-                            onClick={onAddGenerator}
+                        {userRole === 'admin' && (
+  <button 
+    onClick={onAddGenerator}
                             className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2.5 rounded-xl font-bold transition-all"
                         >
                             + Nuevo
                         </button>
+)}
 
                         <button 
                             onClick={onResetData}

@@ -395,6 +395,7 @@ return () => {
           )}
         </AnimatePresence>
         <Header 
+          userRole={userRole}
           onAddGenerator={async () => {
             if (isAdding) return;
             
