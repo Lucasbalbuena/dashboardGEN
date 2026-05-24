@@ -641,7 +641,7 @@ return () => {
 }}
             defaultOperator={currentOperator}
            
-            isReadOnly={currentUser?.role === 'viewer'}
+            isReadOnly={userRole === 'viewer'}
           />
         )}
 
