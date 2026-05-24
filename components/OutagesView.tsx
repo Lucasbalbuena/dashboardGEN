@@ -155,7 +155,9 @@ const OutagesView: React.FC<OutagesViewProps> = ({ generators, outages, onAddOut
                                 <th className="px-6 py-4 text-center">Horario</th>
                                 <th className="px-6 py-4 text-center">Duración</th>
                                 <th className="px-6 py-4 text-center">Impacto Estimado</th>
-                                <th className="px-6 py-4 text-right"></th>
+                                {!isReadOnly && (
+    <th className="px-6 py-4 text-right"></th>
+)}
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-50">
