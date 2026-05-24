@@ -9,9 +9,10 @@ interface OutagesViewProps {
     onSetOutageEnd: (outageId: string, endTime: string) => void;
     onDeleteOutage: (id: string) => void;
     defaultOperator: string;
+    isReadOnly?: boolean;
 }
 
-const OutagesView: React.FC<OutagesViewProps> = ({ generators, outages, onAddOutage, onSetOutageEnd, onDeleteOutage, defaultOperator }) => {
+const OutagesView: React.FC<OutagesViewProps> = ({ generators, outages, onAddOutage, onSetOutageEnd, onDeleteOutage, defaultOperator, isReadOnly }) => {
     const [selectedGenId, setSelectedGenId] = useState<number | ''>('');
     const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
     const [start, setStart] = useState('08:00');
@@ -47,7 +48,8 @@ const OutagesView: React.FC<OutagesViewProps> = ({ generators, outages, onAddOut
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 font-sans">
-            {/* Formulario de Registro de Corte */}
+           {/* Formulario de Registro de Corte */}
+{!isReadOnly && (
             <div className="lg:col-span-1 bg-white p-6 rounded-3xl shadow-xl border border-slate-200">
                 <div className="flex items-center gap-3 mb-6">
                     <div className="w-10 h-10 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600">
@@ -138,7 +140,7 @@ const OutagesView: React.FC<OutagesViewProps> = ({ generators, outages, onAddOut
                     </button>
                 </div>
             </div>
-
+)}
             {/* Historial de Impacto */}
             <div className="lg:col-span-2 bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden flex flex-col">
                 <div className="p-6 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
@@ -183,36 +185,44 @@ const OutagesView: React.FC<OutagesViewProps> = ({ generators, outages, onAddOut
                                             ) : (
                                                 <div className="flex flex-col items-center gap-1">
                                                     <span className="px-2 py-1 bg-orange-100 rounded text-[10px] font-black text-orange-700">DESDE: {outage.startTime}</span>
-                                                    {editingOutageId === outage.id ? (
-                                                        <div className="flex items-center gap-1 mt-1">
-                                                            <input 
-                                                                type="time" 
-                                                                className="text-[10px] p-1 border border-slate-300 rounded outline-none focus:ring-2 focus:ring-orange-500"
-                                                                value={tempEndTime}
-                                                                onChange={(e) => setTempEndTime(e.target.value)}
-                                                            />
-                                                            <button 
-                                                                onClick={() => handleRestoreOutage(outage.id)}
-                                                                className="bg-emerald-600 text-white p-1 rounded hover:bg-emerald-500 transition-colors shadow-sm"
-                                                            >
-                                                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-                                                            </button>
-                                                            <button 
-                                                                onClick={() => setEditingOutageId(null)}
-                                                                className="bg-slate-200 text-slate-600 p-1 rounded hover:bg-slate-300 transition-colors"
-                                                            >
-                                                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                                                            </button>
-                                                        </div>
-                                                    ) : (
-                                                        <button 
-                                                            onClick={() => setEditingOutageId(outage.id)}
-                                                            className="text-[9px] font-black text-indigo-600 underline hover:text-indigo-800 uppercase tracking-tight"
-                                                        >
-                                                            Cerrar Corte
-                                                        </button>
-                                                    )}
-                                                </div>
+                                                   {editingOutageId === outage.id ? (
+    <div className="flex items-center gap-1 mt-1">
+        <input 
+            type="time" 
+            className="text-[10px] p-1 border border-slate-300 rounded outline-none focus:ring-2 focus:ring-orange-500"
+            value={tempEndTime}
+            onChange={(e) => setTempEndTime(e.target.value)}
+        />
+
+        <button 
+            onClick={() => handleRestoreOutage(outage.id)}
+            className="bg-emerald-600 text-white p-1 rounded hover:bg-emerald-500 transition-colors shadow-sm"
+        >
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+            </svg>
+        </button>
+
+        <button 
+            onClick={() => setEditingOutageId(null)}
+            className="bg-slate-200 text-slate-600 p-1 rounded hover:bg-slate-300 transition-colors"
+        >
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+) : (
+    !isReadOnly && (
+        <button 
+            onClick={() => setEditingOutageId(outage.id)}
+            className="text-[9px] font-black text-indigo-600 underline hover:text-indigo-800 uppercase tracking-tight"
+        >
+            Cerrar Corte
+        </button>
+    )
+)}
+                                    </div>
                                             )}
                                         </td>
                                         <td className="px-6 py-4 text-center font-bold text-slate-700">
@@ -230,14 +240,18 @@ const OutagesView: React.FC<OutagesViewProps> = ({ generators, outages, onAddOut
                                                 <span className="text-[10px] font-black text-slate-300 italic uppercase">Cálculo Pendiente</span>
                                             )}
                                         </td>
-                                        <td className="px-6 py-4 text-right">
-                                            <button 
-                                                onClick={() => onDeleteOutage(outage.id)}
-                                                className="opacity-0 group-hover:opacity-100 text-slate-300 hover:text-rose-500 transition-all p-2"
-                                            >
-                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                            </button>
-                                        </td>
+                                       {!isReadOnly && (
+<td className="px-6 py-4 text-right">
+        <button 
+            onClick={() => onDeleteOutage(outage.id)}
+            className="opacity-0 group-hover:opacity-100 text-slate-300 hover:text-rose-500 transition-all p-2"
+        >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+        </button>
+   </td>
+)}
                                     </tr>
                                 ))
                             )}

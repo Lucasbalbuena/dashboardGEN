@@ -517,7 +517,8 @@ return () => {
         )}
 
         {view === 'fuel' && (
-          <FuelManagementView 
+          <FuelManagementView
+            isReadOnly={userRole === 'viewer'} 
             generators={generators}
             fuelLoads={fuelLoads}
             onAddLoad={handleAddFuelLoad}
