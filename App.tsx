@@ -640,8 +640,12 @@ return () => {
    }
 }}
             defaultOperator={currentOperator}
+           
+            isReadOnly={currentUser?.role === 'viewer'}
           />
         )}
+
+         
 
         {view === 'reports' && (
           <ReportsView 
