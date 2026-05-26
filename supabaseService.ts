@@ -84,6 +84,7 @@ function parseIndustrialNumber(value: any): number | null {
       potencia: parseIndustrialNumber(gen.powerKVA) || null,
       horas_motor: parseIndustrialNumber(gen.executionHours) || null,
       combustible: parseIndustrialNumber(gen.fuelLevel) || 0,
+      capacidad_combustible: parseIndustrialNumber(gen.tankCapacity) || 0,
       bateria: parseIndustrialNumber(gen.batteryVoltage) || null,
       voltaje: parseIndustrialNumber((gen as any).voltaje) || parseIndustrialNumber(gen.powerKVA) || null, 
       frecuencia: parseIndustrialNumber((gen as any).frecuencia) || null,

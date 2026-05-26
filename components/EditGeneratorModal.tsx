@@ -96,6 +96,24 @@ const EditGeneratorModal: React.FC<EditGeneratorModalProps> = ({ isOpen, onClose
                 />
               </div>
 
+<div className="space-y-2">
+  <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest">
+    Capacidad Combustible (L)
+  </label>
+
+  <input
+    type="number"
+    value={formData.tankCapacity || ''}
+onChange={e =>
+  setFormData({
+    ...formData,
+    tankCapacity: e.target.value
+  })
+}
+    className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-900 focus:border-indigo-500 outline-none transition-all"
+  />
+</div>
+
               <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest">Horas Motor</label>
                 <input 
