@@ -51,7 +51,9 @@ function parseIndustrialNumber(value: any): number | null {
       name: g.nombre,
       executionHours: g.horas_motor !== null ? `${g.horas_motor} Hr` : '0 Hr',
       fuelLevel: Number(g.combustible || 0),
-      tankCapacity: '50 Lts', 
+      tankCapacity: g.capacidad_combustible != null
+  ? `${g.capacidad_combustible} Lts`
+  : '0 Lts',
       powerKVA: g.potencia !== null ? `${g.potencia}KVA` : (g.voltaje !== null ? `${g.voltaje}V` : '22KVA'), 
       batteryVoltage: g.bateria !== null ? `${g.bateria}V` : '12V',
       lastRechargeLiters: '0',
