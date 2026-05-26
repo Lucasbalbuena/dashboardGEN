@@ -465,13 +465,6 @@ return () => {
         {view === 'dashboard' && (
           <div className="space-y-4">
             <div className="flex justify-between items-center gap-2 print:hidden">
-               <button 
-                onClick={() => setView('scanner')}
-                className="bg-indigo-600 text-white px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-[0.2em] hover:bg-indigo-500 transition-all shadow-xl shadow-indigo-200 flex items-center gap-3 active:scale-95"
-               >
-                 <Zap className="w-5 h-5" />
-                 👉 Escanear Generador
-               </button>
                {userRole === 'admin' && (
   <button 
     onClick={() => setView('scanner')}
