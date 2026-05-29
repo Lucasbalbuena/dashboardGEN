@@ -50,7 +50,7 @@ const formatearUltimaCarga = (valor: string) => {
          }) + " hs";
 };
 
-const GeneratorTable: React.FC<GeneratorTableProps> = ({ generators, onSort, sortConfig, onRowClick, selectedRowId, editingCell, onCellDoubleClick, onUpdate, onEdit, onDelete, onTicketClick }) => {
+const GeneratorTable: React.FC<GeneratorTableProps> = ({ generators, onSort, sortConfig, onRowClick, selectedRowId, editingCell, onCellDoubleClick, onUpdate, onEdit, onDelete, onTicketClick, isReadOnly }) => {
   const headers: { label: string; key: keyof Generator }[] = [
   { label: 'Ubicación', key: 'name' },
   { label: 'N° de Serie', key: 'serialNumber' },
@@ -166,20 +166,31 @@ const GeneratorTable: React.FC<GeneratorTableProps> = ({ generators, onSort, sor
                   />
                 ) : formatearUltimaCarga(g.lastRechargeDate)}
               </td>
-              <td className="px-4 py-4 flex items-center justify-center gap-2">
-                <button 
-                  onClick={(e) => { e.stopPropagation(); onEdit(g); }}
-                  className="opacity-0 group-hover:opacity-100 p-2 text-indigo-500 hover:bg-indigo-50 rounded-lg transition-all"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
-                </button>
-                <button 
-                  onClick={(e) => { e.stopPropagation(); onDelete(g.id); }}
-                  className="opacity-0 group-hover:opacity-100 p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-all"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                </button>
-              </td>
+              <td className="px-4 py-4">
+  {!isReadOnly && (
+    <div className="flex items-center justify-center gap-2">
+      
+      <button 
+        onClick={(e) => { e.stopPropagation(); onEdit(g); }}
+        className="opacity-0 group-hover:opacity-100 p-2 text-indigo-500 hover:bg-indigo-50 rounded-lg transition-all"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+        </svg>
+      </button>
+
+      <button 
+        onClick={(e) => { e.stopPropagation(); onDelete(g.id); }}
+        className="opacity-0 group-hover:opacity-100 p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-all"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+      </button>
+
+    </div>
+  )}
+</td>
             </tr>
           );
         })}
