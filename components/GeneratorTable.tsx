@@ -15,6 +15,8 @@ interface GeneratorTableProps {
   onEdit: (gen: Generator) => void;
   onDelete: (id: number) => void;
   isReadOnly: boolean;
+
+onTicketClick: (gen: Generator) => void;
 }
 
 const getStatusClass = (status: Status): string => {
@@ -48,7 +50,7 @@ const formatearUltimaCarga = (valor: string) => {
          }) + " hs";
 };
 
-const GeneratorTable: React.FC<GeneratorTableProps> = ({ generators, onSort, sortConfig, onRowClick, selectedRowId, editingCell, onCellDoubleClick, onUpdate, onEdit, onDelete }) => {
+const GeneratorTable: React.FC<GeneratorTableProps> = ({ generators, onSort, sortConfig, onRowClick, selectedRowId, editingCell, onCellDoubleClick, onUpdate, onEdit, onDelete, onTicketClick }) => {
   const headers: { label: string; key: keyof Generator }[] = [
   { label: 'Ubicación', key: 'name' },
   { label: 'N° de Serie', key: 'serialNumber' },
@@ -58,6 +60,7 @@ const GeneratorTable: React.FC<GeneratorTableProps> = ({ generators, onSort, sor
   { label: 'Nivel de Combustible (%)', key: 'fuelLevel' },
   { label: 'Estado', key: 'status' },
   { label: 'Voltaje', key: 'batteryVoltage' },
+  { label: 'Ticket', key: 'ticket' },
   { label: 'Fecha de Modificación', key: 'lastRechargeDate' }
 ];
 
@@ -137,7 +140,18 @@ const GeneratorTable: React.FC<GeneratorTableProps> = ({ generators, onSort, sor
                   <input autoFocus onBlur={(e) => onUpdate(g.id, 'batteryVoltage', e.target.value)} defaultValue={g.batteryVoltage || ''} className={`${inputBaseClass} w-20`} />
                 ) : g.batteryVoltage || '-'}
               </td>
-              
+              <td className="px-4 py-4 text-center">
+  {g.ticket ? (
+    <button
+      onClick={() => onTicketClick(g)}
+      className="text-indigo-600 whitespace-nowrap font-black underline hover:text-indigo-800 transition-all text-sm"
+    >
+      {g.ticket}
+    </button>
+  ) : (
+    <span className="text-slate-400 text-sm">—</span>
+  )}
+</td>
               <td 
                 className="px-6 py-4 text-slate-700 text-sm font-semibold whitespace-pre-line" 
                 onDoubleClick={() => onCellDoubleClick(g.id, 'lastRechargeDate')}

@@ -59,6 +59,11 @@ function parseIndustrialNumber(value: any): number | null {
       lastRechargeLiters: '0',
       lastRechargeDate: g.ultima_carga || g.updated_at || g.created_at || g.ultima_lectura || new Date().toISOString(),
       serialNumber: g.nodo,
+ticket: g.ticket || '',
+ticketUrl: g.ticket_url || '',
+ticketStatus: g.ticket_status || 'Pendiente',
+ticketPriority: g.ticket_priority || 'Media',
+ticketDescription: g.ticket_description || '',
     }));
   },
 
@@ -93,10 +98,15 @@ function parseIndustrialNumber(value: any): number | null {
 
       estado: (gen as any).status || (gen as any).estado || 'OFF',
       alarmas: (gen as any).alarmas || [],
-      ultima_lectura: new Date().toISOString()
-    };
+      ultima_lectura: new Date().toISOString(),
 
-    console.log('CLEAN output:', cleanedData);
+ticket: (gen as any).ticket || null,
+ticket_url: (gen as any).ticketUrl || null,
+ticket_status: (gen as any).ticketStatus || null,
+ticket_priority: (gen as any).ticketPriority || null,
+ticket_description: (gen as any).ticketDescription || null,
+};
+      console.log('CLEAN output:', cleanedData);
 
     const operation = async () => {
       let result;

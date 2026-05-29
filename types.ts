@@ -34,17 +34,32 @@ export interface FuelLoad {
 export interface Generator {
   id: number;
   name: string;
+
   executionHours: string;
-  fuelLevel: number; // Porcentaje 0-100
-  tankCapacity: string; 
-  powerKVA: string; // Nueva columna basada en la imagen
+
+  fuelLevel: number;
+  tankCapacity: string;
+
+  powerKVA: string;
+
   serialNumber?: string;
   batteryVoltage?: string;
-  lastRechargeLiters: string; 
+
+  lastRechargeLiters: string;
+
   status: Status;
-  lastRechargeDate: string; // DD/MM/YYYY
-  timeSinceLastRecharge: number; // en días
+
+  lastRechargeDate: string;
+  timeSinceLastRecharge: number;
+
   operator?: string;
+
+  // Tickets
+  ticket?: string;
+  ticketUrl?: string;
+  ticketStatus?: string;
+  ticketPriority?: string;
+  ticketDescription?: string;
 }
 
 export type StoredGenerator = Omit<Generator, 'status' | 'timeSinceLastRecharge'>;

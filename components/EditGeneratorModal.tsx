@@ -12,13 +12,30 @@ interface EditGeneratorModalProps {
   onDelete: (id: number) => Promise<void>;
 }
 
-const EditGeneratorModal: React.FC<EditGeneratorModalProps> = ({ isOpen, onClose, generator, onSave, onDelete }) => {
-  const [formData, setFormData] = useState<Partial<Generator>>({});
+const EditGeneratorModal: React.FC<EditGeneratorModalProps> = ({
+  isOpen,
+  onClose,
+  generator,
+  onSave,
+  onDelete
+}) => {
+
+  const [formData, setFormData] =
+    useState<Partial<Generator>>({});
+
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (generator) {
-      setFormData(generator);
+      setFormData({
+        ...generator,
+
+        ticket: generator.ticket || '',
+        ticketUrl: generator.ticketUrl || '',
+        ticketStatus: generator.ticketStatus || 'Pendiente',
+        ticketPriority: generator.ticketPriority || 'Media',
+        ticketDescription: generator.ticketDescription || '',
+      });
     }
   }, [generator]);
 
@@ -104,14 +121,96 @@ const EditGeneratorModal: React.FC<EditGeneratorModalProps> = ({ isOpen, onClose
   <input
     type="number"
     value={formData.tankCapacity || ''}
-onChange={e =>
-  setFormData({
-    ...formData,
-    tankCapacity: e.target.value
-  })
-}
+    onChange={e =>
+      setFormData({
+        ...formData,
+        tankCapacity: e.target.value
+      })
+    }
     className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-900 focus:border-indigo-500 outline-none transition-all"
   />
+</div>
+
+<div className="space-y-2">
+  <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest">
+    Ticket
+  </label>
+
+  <input
+    type="text"
+    value={formData.ticket || ''}
+    onChange={(e) =>
+      setFormData({
+        ...formData,
+        ticket: e.target.value
+      })
+    }
+    placeholder="I-005289"
+    className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-900 focus:border-indigo-500 outline-none transition-all"
+  />
+</div>
+
+<div className="space-y-2">
+  <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest">
+    URL Ticket
+  </label>
+
+  <input
+    type="text"
+    value={formData.ticketUrl || ''}
+    onChange={(e) =>
+      setFormData({
+        ...formData,
+        ticketUrl: e.target.value
+      })
+    }
+    placeholder="https://tickets..."
+    className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-900 focus:border-indigo-500 outline-none transition-all"
+  />
+</div>
+<div className="space-y-2">
+  <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest">
+    Estado Ticket
+  </label>
+
+  <select
+    value={formData.ticketStatus || 'Pendiente'}
+    onChange={(e) => {
+
+  console.log(e.target.value);
+
+  setFormData({
+    ...formData,
+    ticketStatus: e.target.value
+  })
+}}
+    className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-900 focus:border-indigo-500 outline-none transition-all"
+  >
+    <option value="Pendiente">Pendiente</option>
+    <option value="En Progreso">En Progreso</option>
+    <option value="Resuelto">Resuelto</option>
+  </select>
+</div>
+
+<div className="space-y-2">
+  <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest">
+    Prioridad Ticket
+  </label>
+
+  <select
+    value={formData.ticketPriority || 'Media'}
+    onChange={(e) =>
+      setFormData({
+        ...formData,
+        ticketPriority: e.target.value
+      })
+    }
+    className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-900 focus:border-indigo-500 outline-none transition-all"
+  >
+    <option value="Alta">Alta</option>
+    <option value="Media">Media</option>
+    <option value="Baja">Baja</option>
+  </select>
 </div>
 
               <div className="space-y-2">

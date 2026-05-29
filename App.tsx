@@ -15,7 +15,8 @@ import LoginView from './components/LoginView';
 import OutagesView from './components/OutagesView';
 import ManualCaptureModal from './components/ManualCaptureModal';
 import EditGeneratorModal from './components/EditGeneratorModal';
-import { supabaseService } from './services/supabaseService';
+import TicketPreviewPanel from './components/TicketPreviewPanel';
+
 
 declare var html2canvas: any;
 
@@ -45,6 +46,7 @@ const extractNumber = (val: string | number): number => {
 import { supabaseService } from './supabaseService';
 import { supabase } from './supabaseClient';
 
+
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
@@ -67,6 +69,7 @@ const App: React.FC = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedGenToEdit, setSelectedGenToEdit] = useState<Generator | null>(null);
+const [selectedTicket, setSelectedTicket] = useState<any | null>(null);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   // Auto-hide toast
@@ -369,7 +372,7 @@ return () => {
 
   return (
     <div className="min-h-screen bg-slate-50 p-4 sm:p-6 lg:p-8 font-sans">
-      <div id="capture-container" className="max-w-7xl mx-auto space-y-6 print:space-y-6 print:max-w-full print:p-4 print:bg-white relative">
+      <div className="w-full space-y-6 print:space-y-6 print:max-w-full print:p-4 print:bg-white relative">
         {isAdding && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm">
             <div className="bg-white p-6 rounded-2xl shadow-2xl flex items-center gap-4 border border-slate-200">
@@ -475,37 +478,76 @@ return () => {
   </button>
 )}
             </div>
-            <div className="bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden print:shadow-none print:border-none">
-              <div className="overflow-x-auto">
-                <GeneratorTable 
-                  generators={sortedGenerators} 
-                  onSort={(key) => setSortConfig(prev => ({ key, direction: prev.key === key && prev.direction === 'ascending' ? 'descending' : 'ascending' }))} 
-                  sortConfig={sortConfig}
-                  selectedRowId={selectedRowId}
-                  onRowClick={setSelectedRowId}
-                  editingCell={editingCell}
-                  onCellDoubleClick={(id, key) => setEditingCell({ id, key })}
-                  onUpdate={handleGeneratorUpdate}
-                  onCancelEdit={() => setEditingCell(null)}
-                  onEdit={(gen) => {
-                    setSelectedGenToEdit(gen);
-                    setIsEditModalOpen(true);
-                  }}
-                  onDelete={async (id) => {
-                    try {
-                        await supabaseService.deleteGenerator(id);
-                        setToast({ message: "Generador eliminado", type: "success" });
-                        setGenerators(prev => prev.filter(g => g.id !== id));
-                    } catch (err: any) {
-                        console.error("Error deleting generator:", err);
-                        setToast({ message: `Error al eliminar: ${err.message}`, type: "error" });
-                    }
-                  }}
-                  isReadOnly={userRole === 'viewer'}
-                />
-              </div>
-              <Legend />
-            </div>
+            <div className="flex gap-4 items-start w-full">
+
+  <div
+  id="capture-container"
+  className="flex-1 min-w-0 bg-white rounded-xl shadow-xl border border-slate-200 overflow-visible"
+>
+
+    <div className="overflow-x-auto">
+      <GeneratorTable
+        generators={sortedGenerators}
+        onSort={(key) =>
+          setSortConfig(prev => ({
+            key,
+            direction:
+              prev.key === key && prev.direction === 'ascending'
+                ? 'descending'
+                : 'ascending'
+          }))
+        }
+        sortConfig={sortConfig}
+        selectedRowId={selectedRowId}
+        onRowClick={setSelectedRowId}
+        editingCell={editingCell}
+        onCellDoubleClick={(id, key) =>
+          setEditingCell({ id, key })
+        }
+        onUpdate={handleGeneratorUpdate}
+        onCancelEdit={() => setEditingCell(null)}
+        onEdit={(gen) => {
+          setSelectedGenToEdit(gen);
+          setIsEditModalOpen(true);
+        }}
+        onDelete={async (id) => {
+          try {
+            await supabaseService.deleteGenerator(id);
+
+            setToast({
+              message: 'Generador eliminado',
+              type: 'success'
+            });
+
+            setGenerators(prev =>
+              prev.filter(g => g.id !== id)
+            );
+          } catch (err: any) {
+            console.error(err);
+
+            setToast({
+              message: `Error: ${err.message}`,
+              type: 'error'
+            });
+          }
+        }}
+        isReadOnly={userRole === 'viewer'}
+        onTicketClick={(gen) => setSelectedTicket(gen)}
+      />
+    </div>
+
+    <Legend />
+  </div>
+
+  {selectedTicket && (
+  <TicketPreviewPanel
+  selectedTicket={selectedTicket}
+  setSelectedTicket={setSelectedTicket}
+  onClose={() => setSelectedTicket(null)}
+/>
+)}
+
+</div>
           </div>
         )}
 
@@ -688,10 +730,26 @@ return () => {
         onClose={() => setIsEditModalOpen(false)}
         generator={selectedGenToEdit}
         onSave={async (updated) => {
-           try {
-             await supabaseService.saveGenerator(updated as any);
-             setToast({ message: "Generador actualizado", type: "success" });
-             await loadData();
+  try {
+
+    await supabaseService.saveGenerator(updated as any);
+
+    setToast({
+      message: "Generador actualizado",
+      type: "success"
+    });
+
+    await loadData();
+
+    // REFRESCAR TICKET SELECCIONADO
+    if (selectedTicket && updated.id === selectedTicket.id) {
+      setSelectedTicket({
+        ...selectedTicket,
+        ...updated
+      });
+    }
+
+  
            } catch (err: any) {
              setToast({ message: `Error: ${err.message}`, type: "error" });
              throw err;
