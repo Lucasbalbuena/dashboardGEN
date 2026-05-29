@@ -5,12 +5,14 @@ interface Props {
   selectedTicket: any;
   setSelectedTicket: any;
   onClose: () => void;
+  isReadOnly: boolean;
 }
 
 const TicketPreviewPanel: React.FC<Props> = ({
   selectedTicket,
   setSelectedTicket,
-  onClose
+  onClose,
+  isReadOnly
 }) => {
   if (!selectedTicket) return null;
 
@@ -68,63 +70,98 @@ const TicketPreviewPanel: React.FC<Props> = ({
 
         <div className="space-y-5 text-sm">
 
-          <div>
+  <div>
   <div className="text-slate-400 uppercase text-[11px] font-bold">
     Estado
   </div>
 
-  <select
-    value={selectedTicket.ticketStatus || 'Pendiente'}
-    onChange={(e) =>
-      setSelectedTicket({
-        ...selectedTicket,
-        ticketStatus: e.target.value
-      })
-    }
-    className={`
-      mt-2 w-full rounded-xl px-4 py-2 font-bold border outline-none transition-all
-      ${
-        selectedTicket.ticketStatus === 'Resuelto'
-          ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
-          : selectedTicket.ticketStatus === 'En Progreso'
-          ? 'bg-blue-100 text-blue-700 border-blue-200'
-          : 'bg-amber-100 text-amber-700 border-amber-200'
+  {isReadOnly ? (
+    <div
+      className={`
+        mt-2 inline-flex px-4 py-2 rounded-xl font-bold text-sm
+        ${
+          selectedTicket.ticketStatus === 'Resuelto'
+            ? 'bg-emerald-100 text-emerald-700'
+            : selectedTicket.ticketStatus === 'En Progreso'
+            ? 'bg-blue-100 text-blue-700'
+            : 'bg-amber-100 text-amber-700'
+        }
+      `}
+    >
+      {selectedTicket.ticketStatus || 'Pendiente'}
+    </div>
+  ) : (
+    <select
+      value={selectedTicket.ticketStatus || 'Pendiente'}
+      onChange={(e) =>
+        setSelectedTicket({
+          ...selectedTicket,
+          ticketStatus: e.target.value
+        })
       }
-    `}
-  >
-    <option value="Pendiente">Pendiente</option>
-    <option value="En Progreso">En Progreso</option>
-    <option value="Resuelto">Resuelto</option>
-  </select>
+      className={`
+        mt-2 w-full rounded-xl px-4 py-2 font-bold border outline-none transition-all
+        ${
+          selectedTicket.ticketStatus === 'Resuelto'
+            ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+            : selectedTicket.ticketStatus === 'En Progreso'
+            ? 'bg-blue-100 text-blue-700 border-blue-200'
+            : 'bg-amber-100 text-amber-700 border-amber-200'
+        }
+      `}
+    >
+      <option value="Pendiente">Pendiente</option>
+      <option value="En Progreso">En Progreso</option>
+      <option value="Resuelto">Resuelto</option>
+     </select>
+  )}
 </div>
-            <div>
+
+<div>
   <div className="text-slate-400 uppercase text-[11px] font-bold">
     Prioridad
   </div>
 
-  <select
-    value={selectedTicket.ticketPriority || 'Media'}
-    onChange={(e) =>
-      setSelectedTicket({
-        ...selectedTicket,
-        ticketPriority: e.target.value
-      })
-    }
-    className={`
-      mt-2 w-full rounded-xl px-4 py-2 font-bold border outline-none transition-all
-      ${
-        selectedTicket.ticketPriority === 'Alta'
-          ? 'bg-red-100 text-red-700 border-red-200'
-          : selectedTicket.ticketPriority === 'Baja'
-          ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
-          : 'bg-orange-100 text-orange-700 border-orange-200'
+  {isReadOnly ? (
+    <div
+      className={`
+        mt-2 inline-flex px-4 py-2 rounded-xl font-bold text-sm
+        ${
+          selectedTicket.ticketPriority === 'Alta'
+            ? 'bg-red-100 text-red-700'
+            : selectedTicket.ticketPriority === 'Baja'
+            ? 'bg-emerald-100 text-emerald-700'
+            : 'bg-orange-100 text-orange-700'
+        }
+      `}
+    >
+      {selectedTicket.ticketPriority || 'Media'}
+    </div>
+  ) : (
+    <select
+      value={selectedTicket.ticketPriority || 'Media'}
+      onChange={(e) =>
+        setSelectedTicket({
+          ...selectedTicket,
+          ticketPriority: e.target.value
+        })
       }
-    `}
-  >
-    <option value="Alta">Alta</option>
-    <option value="Media">Media</option>
-    <option value="Baja">Baja</option>
-  </select>
+      className={`
+        mt-2 w-full rounded-xl px-4 py-2 font-bold border outline-none transition-all
+        ${
+          selectedTicket.ticketPriority === 'Alta'
+            ? 'bg-red-100 text-red-700 border-red-200'
+            : selectedTicket.ticketPriority === 'Baja'
+            ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+            : 'bg-orange-100 text-orange-700 border-orange-200'
+        }
+      `}
+    >
+      <option value="Alta">Alta</option>
+      <option value="Media">Media</option>
+      <option value="Baja">Baja</option>
+    </select>
+  )}
 </div>
 
           <div>
