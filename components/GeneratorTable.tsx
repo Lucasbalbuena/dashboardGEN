@@ -82,9 +82,11 @@ const GeneratorTable: React.FC<GeneratorTableProps> = ({ generators, onSort, sor
               </div>
             </th>
           ))}
-          <th className="px-4 py-4 text-center text-[11px] font-black uppercase tracking-widest text-slate-600"> 
-  Acciones
-</th>
+          {!isReadOnly && (
+  <th className="px-4 py-4 text-center text-[11px] font-black uppercase tracking-widest text-slate-600">
+    Acciones
+  </th>
+)}
         </tr>
       </thead>
       <tbody className="divide-y divide-slate-200">
@@ -166,7 +168,8 @@ const GeneratorTable: React.FC<GeneratorTableProps> = ({ generators, onSort, sor
                   />
                 ) : formatearUltimaCarga(g.lastRechargeDate)}
               </td>
-              <td className="px-4 py-4">
+              {!isReadOnly && (
+  <td className="px-4 py-4">
   {!isReadOnly && (
     <div className="flex items-center justify-center gap-2">
       
@@ -190,7 +193,8 @@ const GeneratorTable: React.FC<GeneratorTableProps> = ({ generators, onSort, sor
 
     </div>
   )}
-</td>
+  </td>
+)}
             </tr>
           );
         })}
