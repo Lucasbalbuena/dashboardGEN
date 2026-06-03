@@ -706,7 +706,7 @@ setIsProcessing(true);
                   voltaje: limpio.voltaje,
                   status: limpio.estado,
                   alarmas: limpio.alarmas,
-                  ultima_lectura: limpio.ultima_lectura
+                  ultima_lectura: limpio.ultima_lectura,
                   updated_at: new Date().toISOString(),
                 } as any);
 

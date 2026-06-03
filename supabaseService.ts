@@ -57,7 +57,11 @@ function parseIndustrialNumber(value: any): number | null {
       powerKVA: g.potencia !== null ? `${g.potencia}KVA` : (g.voltaje !== null ? `${g.voltaje}V` : '22KVA'), 
       batteryVoltage: g.bateria !== null ? `${g.bateria}V` : '12V',
       lastRechargeLiters: '0',
-      lastRechargeDate: g.ultima_carga || g.updated_at || g.created_at || g.ultima_lectura || new Date().toISOString(),
+     lastRechargeDate:
+  g.updated_at ||
+  g.ultima_lectura ||
+  g.created_at ||
+  new Date().toISOString(),
       serialNumber: g.nodo,
 ticket: g.ticket || '',
 ticketUrl: g.ticket_url || '',
