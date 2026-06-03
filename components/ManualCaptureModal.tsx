@@ -295,6 +295,7 @@ const safeJsonParse = (text: string) => {
 };
 
 const processCapture = async (base64Data: string) => {
+if (isProcessing) return;
 
   setIsProcessing(true);
   setResults([]);
@@ -390,17 +391,29 @@ NO expliques nada.
 NO agregues texto fuera del JSON.
 `;
 
-    const startTime = Date.now();
+   
+  const startTime = Date.now();
 
-    const aiResponse = await geminiService.analyzeGeneratorPanel(
-      enhancedImage,
-      prompt
-    );
+const aiResponse: any = await Promise.race([
+
+  geminiService.analyzeGeneratorPanel(
+    enhancedImage,
+    prompt
+  ),
+
+  new Promise((_, reject) =>
+    setTimeout(
+      () => reject(new Error("Gemini timeout")),
+      15000
+    )
+  )
+
+]);
 
     const endTime = Date.now();
 
     console.log("============== RESPUESTA IA RAW ==============");
-    console.log(aiResponse.text);
+   console.log(aiResponse?.text);
 
     let parsedData: any = {};
 
@@ -431,20 +444,27 @@ NO agregues texto fuera del JSON.
       console.error(aiResponse.text);
       console.error(jsonError);
 
-      parsedData = {
-        controlador: "NO DETECTADO",
-        modo: "ERROR",
-        estado_operador: "ERROR",
-        frecuencia: null,
-        voltaje: null,
-        bateria: null,
-        fuel: null,
-        rpm: null,
-        horas_motor: null,
-        alarmas: ["JSON inválido IA"],
-        confianza: 0,
-        lecciones_ocr: "La IA devolvió un JSON corrupto"
-      };
+     parsedData = {
+  controlador: "OCR LOCAL",
+  modo: "FALLBACK",
+  estado_operador: "RUNNING",
+
+  frecuencia: null,
+  voltaje: null,
+  bateria: null,
+  fuel: null,
+  rpm: null,
+  horas_motor: null,
+
+  alarmas: [
+    "Gemini timeout / JSON inválido"
+  ],
+
+  confianza: 0.5,
+
+  lecciones_ocr:
+    "Usando OCR local por fallback IA"
+};
     }
 
     const result: SyncResult = {
@@ -491,7 +511,7 @@ NO agregues texto fuera del JSON.
         responseTime: `${endTime - startTime}ms`,
         rawTesseract: tesseractRaw,
         aiCleaning: parsedData.lecciones_ocr,
-        rawAI: aiResponse.text
+        rawAI: aiResponse?.text || ""
       }
     };
 
@@ -520,7 +540,9 @@ NO agregues texto fuera del JSON.
       JSON.stringify(parsedData, null, 2)
     );
 
-  } catch (err) {
+   } catch (err) {
+
+    console.log("Fallback automático OCR local");
 
     console.error(
       "Industrial Parser Error:",
@@ -551,7 +573,8 @@ NO agregues texto fuera del JSON.
   
   const processCaptureLocal = async (base64Data: string) => {
     // Existing Tesseract logic...
-    setIsProcessing(true);
+if (isProcessing) return;    
+setIsProcessing(true);
     try {
       const worker = await Tesseract.createWorker('eng', 1);
       await worker.setParameters({
@@ -623,8 +646,8 @@ NO agregues texto fuera del JSON.
 
       // Validation logic
       const foundGen = generators.find(g => 
-        result.nodo.toLowerCase().includes(g.name.toLowerCase())
-      );
+  result.nodo?.toLowerCase().includes(g.name.toLowerCase())
+);
       if (foundGen) result.nodo = foundGen.name;
 
       setResults([result]);
