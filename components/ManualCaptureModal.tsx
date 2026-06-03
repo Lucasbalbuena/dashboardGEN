@@ -693,9 +693,11 @@ setIsProcessing(true);
 
                 // Update Generator via Service
                 await supabaseService.saveGenerator({
+
                   id: genId,
                   name: limpio.nombre,
                   serialNumber: limpio.serial,
+                  tankCapacity: foundGen?.tankCapacity || 0,
                   powerKVA: String(limpio.potencia),
                   executionHours: String(limpio.horas_motor),
                   fuelLevel: limpio.combustible,
