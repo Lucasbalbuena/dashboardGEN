@@ -69,6 +69,7 @@ const TicketPreviewPanel: React.FC<Props> = ({
         </div>
 
         <div className="space-y-5 text-sm">
+<div>
 
   <div className="text-slate-400 uppercase text-[11px] font-bold">
     Estado
@@ -114,7 +115,8 @@ const TicketPreviewPanel: React.FC<Props> = ({
       <option value="Resuelto">Resuelto</option>
      </select>
   )}
-
+ 
+  </div>
 <div>
   <div className="text-slate-400 uppercase text-[11px] font-bold">
     Prioridad

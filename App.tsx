@@ -544,6 +544,7 @@ return () => {
   selectedTicket={selectedTicket}
   setSelectedTicket={setSelectedTicket}
   onClose={() => setSelectedTicket(null)}
+  isReadOnly={true}
 />
 )}
 
